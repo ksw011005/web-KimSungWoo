@@ -1,0 +1,16 @@
+canvas {
+  background: #eee;
+  display: block;
+  margin: 0 auto;
+  width: 985px;
+  height: 900px;
+}
+a {
+  position: relative;
+  top: 100px;
+  left: 49%;
+}
+button {
+  width: 50px;
+  height: 30px;
+}
