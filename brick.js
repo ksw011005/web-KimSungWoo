@@ -27,8 +27,8 @@ window.onload = function () {
 
   //강철 블록
   let specialBricks = [];
-  const specialBrickCount = 20; // 강철 블록의 개수를 20개로 증가
-  const specialBricksBelowCount = 5; // 아래쪽에 위치할 특별한 블록 개수
+  const specialBrickCount = 30; // 강철 블록의 개수를 20개로 증가
+  const specialBricksBelowCount = 8; // 아래쪽에 위치할 특별한 블록 개수
 
   // 게임 초기화 함수
   function init() {
@@ -70,59 +70,101 @@ window.onload = function () {
     }
   }
 
-  // 공과 벽돌의 충돌 감지 함수
-  function collisionDetection() {
-    for (let c = 0; c < brickColumnCount; c++) {
-      for (let r = 0; r < brickRowCount; r++) {
-        const b = bricks[c][r];
-        if (b.status == 1) {
-          for (let i = 0; i < balls.length; i++) {
-            let ball = balls[i];
-            if (
-              ball.x > b.x &&
-              ball.x < b.x + brickWidth &&
-              ball.y > b.y &&
-              ball.y < b.y + brickHeight
-            ) {
-              ball.dy = -ball.dy;
-              b.status = 0;
-              score++;
-              createItem(b.x + brickWidth / 2, b.y + brickHeight / 2); // 아이템 생성
-              if (score == brickRowCount * brickColumnCount) {
-                alert("YOU WIN, CONGRATULATIONS!");
-                init();
-              }
-            }
+// 공과 벽돌의 충돌 감지 함수
+function collisionDetection() {
+  let remainingBricks = 0; // 남은 블록 수를 세기 위한 변수
+
+  for (let c = 0; c < brickColumnCount; c++) {
+    for (let r = 0; r < brickRowCount; r++) {
+      const b = bricks[c][r];
+      if (b.status == 1) {
+        remainingBricks++; // 남은 블록 수 증가
+        for (let i = 0; i < balls.length; i++) {
+          let ball = balls[i];
+          if (
+            ball.x > b.x &&
+            ball.x < b.x + brickWidth &&
+            ball.y > b.y &&
+            ball.y < b.y + brickHeight
+          ) {
+            ball.dy = -ball.dy;
+            b.status = 0;
+            score++;
+            createItem(b.x + brickWidth / 2, b.y + brickHeight / 2); // 아이템 생성
           }
         }
       }
     }
   }
 
+  // 남은 블록이 강철 블록만 남아있는지 확인
+  if (remainingBricks === specialBrickCount) {
+    alert("YOU WIN, CONGRATULATIONS!");
+    init();
+  }
+}
+
   //강철 블록 관련 함수/////////////////////////////////////////////
 
   //강철 블록 초기화 함수
-  function initSpecialBricks() {
-    specialBricks = [];
-    const brickBottomY =
-      brickOffsetTop +
-      (brickRowCount - 1) * (brickHeight + brickPadding) +
-      brickHeight;
+// 강철 블록 초기화 함수
+function initSpecialBricks() {
+  specialBricks = [];
+  const brickBottomY =
+    brickOffsetTop +
+    (brickRowCount - 1) * (brickHeight + brickPadding) +
+    brickHeight;
 
-    // 아래쪽에 위치할 특별한 블록 생성
     for (let i = 0; i < specialBricksBelowCount; i++) {
-      const x = Math.random() * (canvas.width - brickWidth);
-      const y = brickBottomY + brickHeight + brickPadding; // y값을 한 칸 아래로 고정
+      let x, y;
+      let overlap;
+      do {
+        overlap = false;
+        x = Math.random() * (canvas.width - brickWidth);
+        y = brickBottomY + brickHeight + brickPadding; // y값을 한 칸 아래로 고정
+  
+        // 겹치는지 확인
+        for (let j = 0; j < specialBricks.length; j++) {
+          if (
+            x < specialBricks[j].x + brickWidth &&
+            x + brickWidth > specialBricks[j].x &&
+            y < specialBricks[j].y + brickHeight &&
+            y + brickHeight > specialBricks[j].y
+          ) {
+            overlap = true;
+            break;
+          }
+        }
+      } while (overlap);
+  
       specialBricks.push({ x: x, y: y, status: 1 });
     }
+      // 나머지 특별한 블록 생성
+  for (let i = specialBricksBelowCount; i < specialBrickCount; i++) {
+    let x, y;
+    let overlap;
+    do {
+      overlap = false;
+      x = Math.random() * (canvas.width - brickWidth);
+      y = Math.random() * (brickBottomY - brickHeight);
 
-    // 나머지 특별한 블록 생성
-    for (let i = specialBricksBelowCount; i < specialBrickCount; i++) {
-      const x = Math.random() * (canvas.width - brickWidth);
-      const y = Math.random() * (brickBottomY - brickHeight);
-      specialBricks.push({ x: x, y: y, status: 1 });
-    }
+      // 겹치는지 확인
+      for (let j = 0; j < specialBricks.length; j++) {
+        if (
+          x < specialBricks[j].x + brickWidth &&
+          x + brickWidth > specialBricks[j].x &&
+          y < specialBricks[j].y + brickHeight &&
+          y + brickHeight > specialBricks[j].y
+        ) {
+          overlap = true;
+          break;
+        }
+      }
+    } while (overlap);
+
+    specialBricks.push({ x: x, y: y, status: 1 });
   }
+}
 
   //강철 블록 그리기
   function drawSpecialBricks() {
@@ -135,31 +177,54 @@ window.onload = function () {
           brickWidth,
           brickHeight
         );
-        ctx.fillStyle = "#FF00FF"; // 특별한 블록의 색상
+        ctx.fillStyle = "#A9A9A9"; // 특별한 블록의 색상
         ctx.fill();
         ctx.closePath();
       }
     }
   }
 
-  //강철 블록과 충돌 감지 함수
-  function specialBrickCollisionDetection() {
-    for (let i = 0; i < specialBricks.length; i++) {
-      if (specialBricks[i].status == 1) {
-        for (let j = 0; j < balls.length; j++) {
-          let ball = balls[j];
-          if (
-            ball.x > specialBricks[i].x &&
-            ball.x < specialBricks[i].x + brickWidth &&
-            ball.y > specialBricks[i].y &&
-            ball.y < specialBricks[i].y + brickHeight
-          ) {
-            ball.dy = -ball.dy;
+// 강철 블록과 충돌 감지 함수
+function specialBrickCollisionDetection() {
+  for (let i = 0; i < specialBricks.length; i++) {
+    if (specialBricks[i].status == 1) {
+      for (let j = 0; j < balls.length; j++) {
+        let ball = balls[j];
+        if (
+          ball.x + ballRadius > specialBricks[i].x &&
+          ball.x - ballRadius < specialBricks[i].x + brickWidth &&
+          ball.y + ballRadius > specialBricks[i].y &&
+          ball.y - ballRadius < specialBricks[i].y + brickHeight
+        ) {
+          // 공이 블록의 상하좌우 어느 면에 부딪혔는지 확인
+          let collideLeft = ball.x - ballRadius < specialBricks[i].x;
+          let collideRight = ball.x + ballRadius > specialBricks[i].x + brickWidth;
+          let collideTop = ball.y - ballRadius < specialBricks[i].y;
+          let collideBottom = ball.y + ballRadius > specialBricks[i].y + brickHeight;
+
+          
+          if((collideTop&&collideLeft)||(collideTop&&collideRight)||(collideBottom&&collideLeft)||(collideBottom&&collideRight)){
+            const rand = Math.random();
+            if(rand<0.5){
+              ball.dy=-ball.dy;
+            }
+            else{
+              ball.dx= -ball.dx;
+            }
+          }
+          
+
+          else if(collideLeft || collideRight) {
+            ball.dx = -ball.dx; // 좌우 충돌 시 x 방향 반전
+          }
+          else if (collideTop || collideBottom) {
+            ball.dy = -ball.dy; // 상하 충돌 시 y 방향 반전
           }
         }
       }
     }
   }
+}
 
   //////////////////////////////////////////////////////////
 
@@ -283,7 +348,7 @@ window.onload = function () {
     for (let i = 0; i < balls.length; i++) {
       ctx.beginPath();
       ctx.arc(balls[i].x, balls[i].y, ballRadius, 0, Math.PI * 2);
-      ctx.fillStyle = "#0095DD";
+      ctx.fillStyle = "#000000";
       ctx.fill();
       ctx.closePath();
     }
@@ -340,7 +405,7 @@ window.onload = function () {
           bricks[c][r].y = brickY;
           ctx.beginPath();
           ctx.rect(brickX, brickY, brickWidth, brickHeight);
-          ctx.fillStyle = "#0095DD";
+          ctx.fillStyle = "#8B2D2B";
           ctx.fill();
           ctx.closePath();
         }
@@ -381,4 +446,5 @@ window.onload = function () {
 
   init();
   draw();
+
 };
