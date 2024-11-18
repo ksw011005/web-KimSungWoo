@@ -1,0 +1,17 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+canvas {
+  display: block;
+  margin: 0 auto;
+  background: #f4f4f4;
+}
+#inputWord {
+  display: block;
+  margin: 20px auto;
+  font-size: 20px;
+  width: 200px;
+  text-align: center;
+  ime-mode: disabled;
+}
