@@ -1,26 +1,28 @@
-body{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10%;
-    background-color: rgb(56, 56, 56);
+body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10%;
+  background-color: rgb(56, 56, 56);
 }
 
-img{
-    width: 400px;
-    height: 300px;
+img {
+  width: 400px;
+  height: 300px;
 }
 
-.brick, .jump, .korean{
-    height: 100vb;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
+.brick,
+.jump,
+.avoid {
+  height: 100vb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
-a{
-    text-decoration: none;
-    color: white;
-    font-size: 20px;
+a {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
 }
