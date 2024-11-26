@@ -312,13 +312,13 @@ function specialBrickCollisionDetection() {
 
   //블록 충돌 시 아이템 생성 호출
   function collisionDetection() {
-    let remainingBricks = 220; // 남은 블록 수를 세기 위한 변수
+    let remainingBricks = 0; // 남은 블록 수를 세기 위한 변수
 
     for (let c = 0; c < brickColumnCount; c++) {
       for (let r = 0; r < brickRowCount; r++) {
         const b = bricks[c][r];
         if (b.status == 1) {
-          remainingBricks--; // 남은 블록 수 증가
+          remainingBricks++; // 남은 블록 수 증가
           for (let i = 0; i < balls.length; i++) {
             let ball = balls[i];
             if (
@@ -338,9 +338,13 @@ function specialBrickCollisionDetection() {
     }
 
     // 남은 블록이 강철 블록만 남아있는지 확인
-    if (remainingBricks === specialBrickCount) {
-      alert("YOU WIN, CONGRATULATIONS!");
-      init();
+    if (remainingBricks === specialBrickCount+10) {
+      if(confirm("YOU WIN, CONGRATULATIONS!")===true) init();
+      else {
+        ball.dx=0;
+        ball.dy=0;
+        return;
+      }
     }
   }
 
@@ -392,8 +396,14 @@ function specialBrickCollisionDetection() {
     }
 
     if (balls.length === 0) {
-      alert("GAME OVER");
-      init();
+      if(confirm("Game Over! Score: " + score + "\nDo you want to restart?")===true){
+        init();
+      }
+      else{
+        ball.dx=0;
+        ball.dy=0;
+        return;
+      }
     }
   }
 
