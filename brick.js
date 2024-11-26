@@ -4,7 +4,7 @@ window.onload = function () {
   const ctx = canvas.getContext("2d");
 
   // 공과 패들, 벽돌의 초기 설정
-  const ballRadius = 10;
+  const ballRadius = 5;
   let paddleX, rightPressed, leftPressed, score;
   const paddleHeight = 10;
   const paddleWidth = 150;
@@ -201,25 +201,37 @@ function specialBrickCollisionDetection() {
           let collideRight = ball.x + ballRadius > specialBricks[i].x + brickWidth;
           let collideTop = ball.y - ballRadius < specialBricks[i].y;
           let collideBottom = ball.y + ballRadius > specialBricks[i].y + brickHeight;
-
+          
+          
           
           if((collideTop&&collideLeft)||(collideTop&&collideRight)||(collideBottom&&collideLeft)||(collideBottom&&collideRight)){
-            const rand = Math.random();
-            if(rand<0.5){
-              ball.dy=-ball.dy;
+            if(collideTop&&collideLeft){
+              if(ball.y - ballRadius - specialBricks[i].y < ball.x - ballRadius- specialBricks[i].x) ball.dy = -ball.dy;
+              else ball.dx = -ball.dx;
+            }
+            else if(collideTop&&collideRight){
+              if(ball.y - ballRadius - specialBricks[i].y < specialBricks[i].x + brickWidth-ball.x - ballRadius) ball.dy = -ball.dy;
+              else ball.dx = -ball.dx;
+            }
+            else if(collideBottom&&collideLeft){
+              if(specialBricks[i].y + brickHeight-ball.y - ballRadius < ball.x - ballRadius- specialBricks[i].x) ball.dy = -ball.dy;
+              else ball.dx = -ball.dx;
             }
             else{
-              ball.dx= -ball.dx;
+              if(specialBricks[i].y + brickHeight-ball.y - ballRadius < specialBricks[i].x + brickWidth-ball.x - ballRadius) ball.dy = -ball.dy;
+              else ball.dx = -ball.dx;
             }
-          }
+          } 
+          
           
 
           else if(collideLeft || collideRight) {
             ball.dx = -ball.dx; // 좌우 충돌 시 x 방향 반전
           }
-          else if (collideTop || collideBottom) {
+          else {
             ball.dy = -ball.dy; // 상하 충돌 시 y 방향 반전
           }
+          
         }
       }
     }
@@ -300,13 +312,13 @@ function specialBrickCollisionDetection() {
 
   //블록 충돌 시 아이템 생성 호출
   function collisionDetection() {
-    let remainingBricks = 0; // 남은 블록 수를 세기 위한 변수
+    let remainingBricks = 220; // 남은 블록 수를 세기 위한 변수
 
     for (let c = 0; c < brickColumnCount; c++) {
       for (let r = 0; r < brickRowCount; r++) {
         const b = bricks[c][r];
         if (b.status == 1) {
-          remainingBricks++; // 남은 블록 수 증가
+          remainingBricks--; // 남은 블록 수 증가
           for (let i = 0; i < balls.length; i++) {
             let ball = balls[i];
             if (
