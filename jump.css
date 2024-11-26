@@ -15,3 +15,7 @@ canvas {
   text-align: center;
   ime-mode: disabled;
 }
+button {
+  width: 50px;
+  height: 30px;
+}
