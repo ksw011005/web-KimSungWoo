@@ -116,7 +116,8 @@ function update() {
     ) {
       if (obstacle.color === "green") {
         obstacleSpeed = Math.max(2, obstacleSpeed - 3); // 속도 감소, 최소 속도 2
-      } else {
+      } 
+      else {
         gameOver = true;
         if (
           confirm("Game Over! Score: " + score + "\nDo you want to restart?")
