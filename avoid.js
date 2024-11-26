@@ -139,7 +139,7 @@ function spawnArrows() {
       height: 15,
       x: 0,
       y: 0,
-      speed: 5,
+      speed: 3,
       direction: direction,
     };
 
@@ -267,7 +267,7 @@ function spawnRandomArrow() {
     height: 15,
     x: 0,
     y: 0,
-    speed: 5,
+    speed: 2,
     direction: directions[Math.floor(Math.random() * directions.length)], // 무작위 방향 설정
   };
 
