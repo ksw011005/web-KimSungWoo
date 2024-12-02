@@ -1,0 +1,35 @@
+canvas {
+  background: #eee;
+  display: block;
+  margin: 0 auto;
+  width: 985px;
+  height: 900px;
+}
+a {
+  position: relative;
+  left: 47%;
+}
+button {
+  width: 50px;
+  height: 30px;
+}
+
+.audio-controls {
+  position: fixed;
+  top: 100px;
+  right: 100px;
+  display: flex;
+  align-items: center;
+}
+.volume-control {
+  margin-left: 10px;
+  width: 50px;
+}
+
+#mute {
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>벽돌깨기 게임</title>
+    <script src="brick.js"></script>
+    <link rel="stylesheet" href="brick.css" />
+  </head>
+  <body>
+    <canvas id="myCanvas" width="980px" height="900px"></canvas>
+    <a href=""><button>start</button></a>
+    <a href="index.html"><button>home</button></a>
+    <audio id="audio" src="brick.mp3" loop></audio>
+    <div class="audio-controls">
+      <button id="mute"></button>
+      <input
+        type="range"
+        id="volume"
+        class="volume-control"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.5"
+      />
+    </div>
+  </body>
+</html>

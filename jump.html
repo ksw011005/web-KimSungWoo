@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jump</title>
+    <link rel="stylesheet" href="jump.css" />
+    <script src="jump.js" defer></script>
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="1000" height="400"></canvas>
+    <input type="text" id="inputWord" placeholder="Enter the word" autofocus />
+    <div class="btn">
+      <a href=""><button>start</button></a>
+      <a href="index.html"><button>home</button></a>
+      <audio id="audio" src="jump.mp3" loop></audio>
+      <div class="audio-controls">
+        <button id="mute"></button>
+        <input
+          type="range"
+          id="volume"
+          class="volume-control"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.5"
+        />
+      </div>
+    </div>
+  </body>
+</html>

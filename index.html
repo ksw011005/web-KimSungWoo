@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOME</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js" defer></script>
+  </head>
+  <body>
+    <div id="overlay">
+      <h1>do you want to play a game?</h1>
+      <button id="button">Let's go</button>
+    </div>
+    <audio id="audio" src="index.mp3" loop></audio>
+    <div class="audio-controls">
+      <button id="mute"></button>
+      <input
+        type="range"
+        id="volume"
+        class="volume-control"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.5"
+      />
+    </div>
+
+    <div class="brick">
+      <a href="brick.html">과유불급 벽돌깨기 게임</a>
+      <br />
+      <details class="brick_explain">
+        <summary>게임설명</summary>
+        <textarea name="" id="" readonly>
+벽돌깨기 게임에서 아이템을 추가한 게임입니다.
+벽돌을 깼을 때 일정 확률로 빨간 구슬과 초록 구슬이 나옵니다.
+빨간 구슬은 속도가 2배로 오르고 초록 구슬은 구슬의 개수가 2배가 됩니다.
+속도에 제한이 없기 때문에 빨간 구슬을 많이 먹지 않게 조심해야합니다.
+키보드 방향키로 바를 움직일 수 있습니다.
+        </textarea>
+      </details>
+      <br /><br />
+      <a href="brick.html"><video id="brick_Video" src="brick.mp4"></video></a>
+      <input
+        type="range"
+        id="brick-control"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.3"
+      />
+    </div>
+
+    <div class="jump">
+      <a href="jump.html">점프 게임</a>
+      <br />
+      <details class="jump_explain">
+        <summary>게임설명</summary>
+        <textarea name="" id="" readonly>
+점프 게임과 타자 게임을 합친 게임입니다.
+게임 화면 가운데 뜨는 영어 단어를 입력창에 입력하고 엔터를 누르면 점프를 합니다.
+빨간색 블록은 피해야하고, 초록색 블록은 부딪히면 일정 시간 동안 느려집니다.
+느려지면 빨간색 블록이 나오기 때문에 굉장히 힘들어 집니다.
+        </textarea>
+      </details>
+      <br /><br />
+      <a href="jump.html"><video id="jump_Video" src="jump.mp4"></video></a>
+      <input
+        type="range"
+        id="jump-control"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.3"
+      />
+    </div>
+    <div class="avoid">
+      <a href="avoid.html">화살을 피해라</a>
+      <br />
+      <details class="avoid_explain">
+        <summary>게임설명</summary>
+        <textarea name="" id="" readonly>
+곳곳에서 날아오는 화살을 피하는 게임입니다.
+아마 이보다 간단하면서 어려운 게임은 별로 없을겁니다.
+방향키로 움직일 수 있습니다.
+        </textarea>
+      </details>
+      <br /><br />
+      <a href="avoid.html"><video id="avoid_Video" src="avoid.mp4"></video></a>
+      <input
+        type="range"
+        id="avoid-control"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.2"
+      />
+    </div>
+  </body>
+</html>
