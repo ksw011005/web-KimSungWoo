@@ -333,6 +333,58 @@ function spawnRandomArrow() {
 }
 //////////////////////////////////////////
 
+///////////////순위/////////////////////////
+// 로컬 스토리지에서 기존 기록 불러오기
+function getLeaderboard() {
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  return leaderboard;
+}
+
+// 새로운 기록을 leaderboard에 추가하고 로컬 스토리지에 저장
+function updateLeaderboard(time) {
+  const leaderboard = getLeaderboard();
+
+  // 새 기록 추가
+  leaderboard.push(time);
+
+  // 시간을 기준으로 내림차순 정렬
+  leaderboard.sort((a, b) => b - a);
+
+  // 최고 10개의 기록만 저장
+  if (leaderboard.length > 10) {
+    leaderboard.pop();
+  }
+
+  // 로컬 스토리지에 저장
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+}
+
+// 순위 화면을 표시
+function displayLeaderboard() {
+  const leaderboard = getLeaderboard();
+  const rankDiv = document.getElementById("rank");
+  rankDiv.innerHTML = "<h3>Leaderboard</h3>"; // 순위 제목 추가
+
+  leaderboard.forEach((time, index) => {
+    const rankItem = document.createElement("div");
+    rankItem.textContent = `#${index + 1}: ${time.toFixed(1)}s`;
+    rankDiv.appendChild(rankItem);
+  });
+}
+
+window.onload = function () {
+  displayLeaderboard();
+};
+
+window.onbeforeunload = function () {
+  // 게임이 끝난 후 시간이 있을 경우 기록을 저장
+  if (elapsedTime > 0) {
+    updateLeaderboard(elapsedTime);
+  }
+};
+
+///////////////////////////////////////////
+
 function detectCollision() {
   const collisionThreshold = 5; // 충돌 감지 범위 조정
 
@@ -349,7 +401,14 @@ function detectCollision() {
 }
 
 function resetGame() {
+  // 시간을 기록하고 순위를 업데이트
+  updateLeaderboard(elapsedTime);
+
+  // 순위 화면 표시
+  displayLeaderboard();
+
   if (confirm("Game Over! 다시 시작하시겠습니까?")) {
+    // 게임 초기화
     player.x = canvas.width / 2 - player.width / 2;
     player.y = canvas.height / 2 - player.height / 2;
     player.dx = 0;
