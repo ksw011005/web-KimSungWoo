@@ -237,7 +237,7 @@ window.onload = function () {
             ball.y + ballRadius > specialBricks[i].y &&
             ball.y - ballRadius < specialBricks[i].y + brickHeight
           ) {
-            // 공과 블록의 충돌 면을 검사합니다
+            // 공과 블록의 충돌 면을 검사
             let collideLeft = ball.x - ballRadius < specialBricks[i].x;
             let collideRight =
               ball.x + ballRadius > specialBricks[i].x + brickWidth;
