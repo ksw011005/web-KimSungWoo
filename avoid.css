@@ -47,6 +47,7 @@ button {
 
 details {
   cursor: pointer;
+  border : none;
   text-align: center;
 }
 
