@@ -7,7 +7,7 @@ canvas {
 }
 a {
   position: relative;
-  left: 47%;
+  left: 48%;
 }
 button {
   width: 50px;
@@ -32,4 +32,26 @@ button {
   background-size: cover;
   border: none;
   cursor: pointer;
+}
+
+.explain {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  height: 300px;
+  text-align: center;
+}
+
+details {
+  cursor: pointer;
+}
+
+textarea {
+  resize: none;
+  width: 500px;
+  height: 105px;
+  background-color: rgb(56, 56, 56);
+  color: white;
+  border: none;
+  text-align: center;
 }
