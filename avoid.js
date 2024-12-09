@@ -41,8 +41,8 @@ document.addEventListener("keydown", (event) => {
 });
 
 const player = {
-  width: 10,
-  height: 10,
+  width: 7,
+  height: 7,
   x: canvas.width / 2 - 15,
   y: canvas.height / 2 - 15,
   speed: 5,
