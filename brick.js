@@ -237,7 +237,7 @@ window.onload = function () {
             ball.y + ballRadius > specialBricks[i].y &&
             ball.y - ballRadius < specialBricks[i].y + brickHeight
           ) {
-            // 공이 블록의 상하좌우 어느 면에 부딪혔는지 확인
+            // 공과 블록의 충돌 면을 검사합니다
             let collideLeft = ball.x - ballRadius < specialBricks[i].x;
             let collideRight =
               ball.x + ballRadius > specialBricks[i].x + brickWidth;
@@ -245,45 +245,18 @@ window.onload = function () {
             let collideBottom =
               ball.y + ballRadius > specialBricks[i].y + brickHeight;
 
-            if (
-              (collideTop && collideLeft) ||
-              (collideTop && collideRight) ||
-              (collideBottom && collideLeft) ||
-              (collideBottom && collideRight)
-            ) {
-              if (collideTop && collideLeft) {
-                if (
-                  ball.y - ballRadius - specialBricks[i].y <
-                  ball.x - ballRadius - specialBricks[i].x
-                )
-                  ball.dy = -ball.dy;
-                else ball.dx = -ball.dx;
-              } else if (collideTop && collideRight) {
-                if (
-                  ball.y - ballRadius - specialBricks[i].y <
-                  specialBricks[i].x + brickWidth - ball.x - ballRadius
-                )
-                  ball.dy = -ball.dy;
-                else ball.dx = -ball.dx;
-              } else if (collideBottom && collideLeft) {
-                if (
-                  specialBricks[i].y + brickHeight - ball.y - ballRadius <
-                  ball.x - ballRadius - specialBricks[i].x
-                )
-                  ball.dy = -ball.dy;
-                else ball.dx = -ball.dx;
-              } else {
-                if (
-                  specialBricks[i].y + brickHeight - ball.y - ballRadius <
-                  specialBricks[i].x + brickWidth - ball.x - ballRadius
-                )
-                  ball.dy = -ball.dy;
-                else ball.dx = -ball.dx;
-              }
-            } else if (collideLeft || collideRight) {
+            if (collideLeft || collideRight) {
               ball.dx = -ball.dx; // 좌우 충돌 시 x 방향 반전
-            } else {
+              // 공이 블록 내부로 들어가지 않도록 위치 조정
+              if (collideLeft) ball.x = specialBricks[i].x - ballRadius;
+              if (collideRight)
+                ball.x = specialBricks[i].x + brickWidth + ballRadius;
+            } else if (collideTop || collideBottom) {
               ball.dy = -ball.dy; // 상하 충돌 시 y 방향 반전
+              // 공이 블록 내부로 들어가지 않도록 위치 조정
+              if (collideTop) ball.y = specialBricks[i].y - ballRadius;
+              if (collideBottom)
+                ball.y = specialBricks[i].y + brickHeight + ballRadius;
             }
           }
         }
@@ -391,13 +364,9 @@ window.onload = function () {
     }
 
     // 남은 블록이 강철 블록만 남아있는지 확인
-    if (remainingBricks === specialBrickCount + 10) {
-      if (confirm("YOU WIN, CONGRATULATIONS!") === true) init();
-      else {
-        ball.dx = 0;
-        ball.dy = 0;
-        return;
-      }
+    if (remainingBricks === specialBrickCount) {
+      alert("YOU WIN, CONGRATULATIONS!");
+      init(); // 게임 초기화
     }
   }
 
