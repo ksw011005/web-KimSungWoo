@@ -69,7 +69,6 @@ textarea {
   border: 2px solid #000;
   width: 200px;
   height: 270px;
-  overflow-y: hidden;
   background-color: #f4f4f4;
   margin-bottom: 40px;
 }
