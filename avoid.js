@@ -339,6 +339,9 @@ function getLeaderboard() {
   const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
   return leaderboard;
 }
+function getAllRecords() {
+  return JSON.parse(localStorage.getItem("allRecords")) || [];
+}
 
 // 새로운 기록을 leaderboard에 추가하고 로컬 스토리지에 저장
 function updateLeaderboard(time) {
@@ -370,18 +373,94 @@ function displayLeaderboard() {
     rankItem.textContent = `#${index + 1}: ${time.toFixed(1)}s`;
     rankDiv.appendChild(rankItem);
   });
+
+  // Create the graph
+  drawGraph(getAllRecords());
 }
 
 window.onload = function () {
   displayLeaderboard();
+  drawGraph(getAllRecords()); // 페이지 로드 시 그래프를 그리도록 추가
 };
 
 window.onbeforeunload = function () {
   // 게임이 끝난 후 시간이 있을 경우 기록을 저장
   if (elapsedTime > 0) {
     updateLeaderboard(elapsedTime);
+    updateAllRecords(elapsedTime);
   }
 };
+
+function updateAllRecords(time) {
+  const allRecords = getAllRecords();
+  allRecords.push(time);
+  localStorage.setItem("allRecords", JSON.stringify(allRecords));
+}
+
+function drawGraph(data) {
+  const canvas = document.getElementById("leaderboardChart");
+  const ctx = canvas.getContext("2d");
+
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Set graph properties
+  const padding = 40;
+  const graphWidth = canvas.width - padding * 2;
+  const graphHeight = canvas.height - padding * 2;
+  const maxTime = 60; // 60초까지
+  const stepSize = 5; // 5초 단위로 나누기
+
+  // Increase canvas height to avoid overlapping y-axis labels
+  canvas.height = 400; // 높이를 줄여서 막대 그래프 칸 사이를 좁힘
+
+  // Draw axes
+  ctx.beginPath();
+  ctx.moveTo(padding, padding);
+  ctx.lineTo(padding, canvas.height - padding);
+  ctx.lineTo(canvas.width - padding, canvas.height - padding);
+  ctx.stroke();
+
+  // Draw y-axis labels and grid lines
+  for (let i = 0; i <= 20; i++) {
+    const y = canvas.height - padding - (i / 20) * graphHeight;
+    ctx.fillText(i, padding - 30, y + 5);
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(canvas.width - padding, y);
+    ctx.strokeStyle = "#e0e0e0";
+    ctx.stroke();
+  }
+
+  // Draw x-axis labels
+  for (let i = 0; i <= maxTime; i += stepSize) {
+    const x = padding + (i / maxTime) * graphWidth;
+    ctx.fillText(i, x - 10, canvas.height - padding + 20);
+    ctx.beginPath();
+    ctx.moveTo(x, padding);
+    ctx.lineTo(x, canvas.height - padding);
+    ctx.strokeStyle = "#e0e0e0";
+    ctx.stroke();
+  }
+
+  // Draw the bar graph
+  const counts = new Array(maxTime / stepSize).fill(0);
+  data.forEach((time) => {
+    if (time >= 1 && time <= 60) {
+      counts[Math.floor((time - 1) / stepSize)]++;
+    }
+  });
+
+  counts.forEach((count, index) => {
+    const x =
+      padding + ((index * stepSize + stepSize / 2) / maxTime) * graphWidth;
+    const y =
+      canvas.height - padding - (Math.min(count, 20) / 20) * graphHeight;
+    const barHeight = canvas.height - padding - y;
+    ctx.fillStyle = "rgba(75, 192, 192, 1)";
+    ctx.fillRect(x - 10, y, 20, barHeight);
+  });
+}
 
 ///////////////////////////////////////////
 
@@ -403,8 +482,9 @@ function detectCollision() {
 function resetGame() {
   // 시간을 기록하고 순위를 업데이트
   updateLeaderboard(elapsedTime);
+  updateAllRecords(elapsedTime);
 
-  // 순위 화면 표시
+  // 순위 화면 표시 및 그래프 갱신
   displayLeaderboard();
 
   if (confirm("Game Over! 다시 시작하시겠습니까?")) {
