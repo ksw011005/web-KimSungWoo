@@ -548,6 +548,18 @@ function keyUp(e) {
   }
 }
 
+document.addEventListener("keydown", function (event) {
+  switch (event.key) {
+    case "ArrowUp":
+    case "ArrowDown":
+    case "ArrowLeft":
+    case "ArrowRight":
+      event.preventDefault();
+      moveCharacter(event.key); // Call your game movement function
+      break;
+  }
+});
+
 document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
 
